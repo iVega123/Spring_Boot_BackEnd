@@ -1,7 +1,13 @@
-package payroll;
+package payroll.controller;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
+import payroll.enums.*;
+import payroll.model.*;
+import payroll.repository.*;
+import payroll.modelassembler.*;
+import payroll.exceptions.*;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
@@ -20,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
-class ClienteController {
+public class ClienteController {
 
     private final ClienteRepository clienteRepository;
     private final ClienteModelAssembler assembler;
@@ -32,7 +38,7 @@ class ClienteController {
     }
 
     @GetMapping("/clientes")
-    CollectionModel<EntityModel<Cliente>> all() {
+    public CollectionModel<EntityModel<Cliente>> all() {
 
         List<EntityModel<Cliente>> clientes = clienteRepository.findAll().stream() //
                 .map(assembler::toModel) //
@@ -43,7 +49,7 @@ class ClienteController {
     }
 
     @GetMapping("/clientes/{id}")
-    EntityModel<Cliente> one(@PathVariable Long id) {
+    public EntityModel<Cliente> one(@PathVariable Long id) {
 
         Cliente cliente = clienteRepository.findById(id) //
                 .orElseThrow(() -> new ClienteNotFoundException(id));
@@ -63,7 +69,7 @@ class ClienteController {
     }
 
     @DeleteMapping("/clientes/{id}/cancel")
-    ResponseEntity<?> cancel(@PathVariable Long id) {
+    public ResponseEntity<?> cancel(@PathVariable Long id) {
 
         Cliente cliente = clienteRepository.findById(id) //
                 .orElseThrow(() -> new ClienteNotFoundException(id));
@@ -82,7 +88,7 @@ class ClienteController {
     }
 
     @PutMapping("/clientes/{id}/complete")
-    ResponseEntity<?> complete(@PathVariable Long id) {
+    public ResponseEntity<?> complete(@PathVariable Long id) {
 
         Cliente cliente = clienteRepository.findById(id) //
                 .orElseThrow(() -> new ClienteNotFoundException(id));

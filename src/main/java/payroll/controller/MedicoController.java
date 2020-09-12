@@ -1,8 +1,12 @@
-package payroll;
+package payroll.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+import payroll.repository.*;
+import payroll.modelassembler.*;
+import payroll.model.*;
+import payroll.exceptions.*;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.hateoas.CollectionModel;
@@ -17,7 +21,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 
 @RestController
-class MedicoController {
+public class MedicoController {
 
   private final MedicoRepository repository;
   private final MedicoModelAssembler assembler;
@@ -29,9 +33,9 @@ class MedicoController {
   // Aggregate root
 
   @GetMapping("/medicos")
-  CollectionModel<EntityModel<Medico>> all() {
+  public CollectionModel<EntityModel<Medico>> all() {
   
-    List<EntityModel<Medico>> medicos = repository.findAll().stream() //
+     List<EntityModel<Medico>> medicos = repository.findAll().stream() //
         .map(assembler::toModel) //
         .collect(Collectors.toList());
   
@@ -45,7 +49,7 @@ class MedicoController {
 
   // Single item
   @GetMapping("/medicos/{id}")
-  EntityModel<Medico> one(@PathVariable Long id) {
+  public EntityModel<Medico> one(@PathVariable Long id) {
 
     Medico medico = repository.findById(id) //
         .orElseThrow(() -> new MedicoNotFoundException(id));

@@ -1,17 +1,20 @@
-package payroll;
+package payroll.model;
 
+import payroll.enums.*;
 import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CLIENTE")
-class Cliente {
-
-  private @Id @GeneratedValue Long id;
+@Table(name="Clientes")
+public class Cliente {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   private String nome;
   private Status status;

@@ -1,4 +1,4 @@
-package payroll;
+package payroll.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,7 +12,7 @@ class MedicoNotFoundAdvice {
   @ResponseBody
   @ExceptionHandler(MedicoNotFoundException.class)
   @ResponseStatus(HttpStatus.NOT_FOUND)
-  String medicoNotFoundHandler(MedicoNotFoundException ex) {
+   String medicoNotFoundHandler(MedicoNotFoundException ex) {
     return ex.getMessage();
   }
 }

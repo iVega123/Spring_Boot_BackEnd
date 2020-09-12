@@ -1,6 +1,6 @@
-package payroll;
+package payroll.enums;
 
-enum Status {
+public enum Status {
 
   MARCADO, //
   FINALIZADO, //

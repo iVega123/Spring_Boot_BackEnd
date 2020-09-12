@@ -1,10 +1,12 @@
-package payroll;
+package payroll.modelassembler;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
-
+import payroll.controller.*;
+import payroll.model.*;
+import payroll.enums.*;
 @Component
 public class ClienteModelAssembler implements RepresentationModelAssembler<Cliente, EntityModel<Cliente>> {
 

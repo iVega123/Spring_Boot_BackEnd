@@ -1,5 +1,7 @@
-package payroll;
+package payroll.modelassembler;
 
+import payroll.model.*;
+import payroll.controller.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 import org.springframework.hateoas.EntityModel;
