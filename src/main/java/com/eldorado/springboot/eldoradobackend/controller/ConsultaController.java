@@ -1,6 +1,8 @@
 package com.eldorado.springboot.eldoradobackend.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.eldorado.springboot.eldoradobackend.exception.*;
@@ -37,7 +40,7 @@ public class ConsultaController {
     @Autowired
     private MedicoRepository MedicoRepository;
 
-    @GetMapping("/consultas")
+    @RequestMapping(value = "/consultas", method = RequestMethod.GET)
     public List<Consulta> getAllConsulta() {
         return consultaRepository.findAll();
     }
@@ -64,23 +67,22 @@ public class ConsultaController {
     public Consulta createConsulta(@PathVariable(value = "id") Long medicoId,
             @PathVariable(value = "idc") Long clienteId, @Validated @RequestBody Consulta consulta)
             throws ResourceNotFoundException {
-                return MedicoRepository.findById(medicoId).map(medico -> {
-                consulta.setMedico(medico);
-                Cliente cliente = ClienteRepository.findById(clienteId).get();
-                consulta.setCliente(cliente);
-                return consultaRepository.save(consulta);
-            }).orElseThrow(() -> new ResourceNotFoundException("PostId " + consulta + " not found"));
+        return MedicoRepository.findById(medicoId).map(medico -> {
+            consulta.setMedico(medico);
+            Cliente cliente = ClienteRepository.findById(clienteId).get();
+            consulta.setCliente(cliente);
+            return consultaRepository.save(consulta);
+        }).orElseThrow(() -> new ResourceNotFoundException("PostId " + consulta + " not found"));
     }
 
     @PutMapping("/medicos/{id}/clientes/{idc}/consultas/{idconsulta}")
-    public Consulta updateConsulta(@PathVariable (value = "id") Long medicoId,
-                                 @PathVariable (value = "idc") Long clienteId,
-                                 @PathVariable (value= "idconsulta") Long consultaid,
-                                 @Validated @RequestBody Consulta consultaRequest) throws ResourceNotFoundException {
-        if(!MedicoRepository.existsById(medicoId)) {
+    public Consulta updateConsulta(@PathVariable(value = "id") Long medicoId,
+            @PathVariable(value = "idc") Long clienteId, @PathVariable(value = "idconsulta") Long consultaid,
+            @Validated @RequestBody Consulta consultaRequest) throws ResourceNotFoundException {
+        if (!MedicoRepository.existsById(medicoId)) {
             throw new ResourceNotFoundException("Medico com a id: " + medicoId + " não encontrado ");
         }
-        if(!ClienteRepository.existsById(clienteId)) {
+        if (!ClienteRepository.existsById(clienteId)) {
             throw new ResourceNotFoundException("Cliente com a id: " + clienteId + " não encontrado ");
         }
 
@@ -91,13 +93,15 @@ public class ConsultaController {
         }).orElseThrow(() -> new ResourceNotFoundException("Consulta com o id: " + consultaid + "não encontrado"));
     }
 
-    @DeleteMapping("/medicos/{id}/clientes/{idc}/consultas/{idconsulta}")
-    public ResponseEntity<?> deleteConsulta(@PathVariable (value = "id") Long medicoId,
-                              @PathVariable (value = "idc") Long clienteId,
-                              @PathVariable (value = "idconsulta") Long consultaId) throws ResourceNotFoundException {
-        return consultaRepository.findByMedicoIdAndClienteId(medicoId, clienteId).map(consulta -> {
-            consultaRepository.delete(consulta);
-            return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException("Consulta não encontrada com o " + consultaId + " e Cliente Id " + clienteId + "e Medico Id" + medicoId));
+    @DeleteMapping("/consultas/{id}")
+    public Map<String, Boolean> deleteConsulta(@PathVariable(value = "id") Long consultaId)
+            throws ResourceNotFoundException {
+        Consulta consulta = consultaRepository.findById(consultaId).orElseThrow(
+                () -> new ResourceNotFoundException("Medico não encontrado utilizando essa id: " + consultaId));
+
+        consultaRepository.delete(consulta);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deletado", Boolean.TRUE);
+        return response;
     }
 }

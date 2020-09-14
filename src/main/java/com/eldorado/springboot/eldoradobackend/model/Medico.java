@@ -1,31 +1,28 @@
 package com.eldorado.springboot.eldoradobackend.model;
-
-import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 @Entity
 @Table(name = "medicos")
 public class Medico {
 
     private Long id;
+    @Column(name = "nome", nullable = false)
     private String nome;
+    @Column(name = "email", nullable = false)
     private String email;
+    @Column(name = "senha", nullable = false)
     private String senha;
-    private Set<Consulta> consultas = new HashSet<>();
+    
+    @OneToMany(mappedBy = "medico")
+    private Set<Consulta> consultas;
 
     public Medico() {
 
@@ -47,7 +44,6 @@ public class Medico {
         this.id = id;
     }
 
-    @Column(name = "nome", nullable = false)
     public String getNome() {
         return nome;
     }
@@ -56,7 +52,6 @@ public class Medico {
         this.nome = nome;
     }
 
-    @Column(name = "email", nullable = false)
     public String getEmail() {
         return email;
     }
@@ -65,47 +60,13 @@ public class Medico {
         this.email = email;
     }
 
-    @Column(name = "senha", nullable = false)
+
     public String getSenha() {
         return senha;
     }
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    @OneToMany(mappedBy = "medico", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public Set<Consulta> getConsultas() {
-        return consultas;
-    }
-
-    public void setConsultas(Set<Consulta> consultas) {
-        this.consultas = consultas;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Medico other = (Medico) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        return true;
     }
 
     @Override
