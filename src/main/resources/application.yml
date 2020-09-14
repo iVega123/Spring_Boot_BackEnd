@@ -1,0 +1,12 @@
+logging:
+  level:
+    org.springframework.security: debug
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 136720218223-c2qo1raoj5l99us6o02h0p3s584ov6es.apps.googleusercontent.com
+            client-secret: 4zutcj1-Huc1dPmsuTxaICze
+            redirectUri: http://localhost:4200/callback
